@@ -67,11 +67,11 @@ class Plateau :
     def get_valid_moves(self, pion):
         ROWS = 7
         moves = {}
-        r = pion.row if pion is not None else None
+        r = pion.row 
         COLS = 7
         # print('the row of pion is ', r)
         # col = pion.col
-        col = pion.col if pion is not None else None
+        col = pion.col 
 
         # start_ligne_black = r 
         # stop_ligne_black = r - 1
@@ -288,7 +288,7 @@ class Plateau :
                 temp_col += direction_col
                 temp_piece = self.get_pion(temp_row, temp_col)
                 temp_color = self.get_pion_color(temp_row, temp_col)
-                print('temp_col', temp_color)
+                # print('temp_col', temp_color)
                 if temp_piece != 0 is not None and temp_color == WHITE:
                     self.supprimer(temp_row, temp_col, WHITE)
                 elif temp_color is None:
@@ -424,11 +424,12 @@ class Plateau :
 
 
     def ai_move(self , win ):
+        # first = 0
         # from Backend.server import server 
-        print('########## we enter here in ai move #############')
-        if not self.winner():  
+        # print('########## we enter here in ai move #############')
+        if self.black_restant != 0 and self.white_restant != 0 :  
             initial_state = deepcopy(self.plateau)
-            best_move = self.choose_best_move(WHITE)  
+            best_move = self.monte_carlo_Algorithme(WHITE)  
             print('######## the best move is ######## ', best_move)
             self.plateau = deepcopy(initial_state)
             if best_move:
@@ -440,13 +441,9 @@ class Plateau :
                 print('this is piece', piece)
                 if piece  :
                     self.changerPosition( piece, r1 , c1)
-                    self.plateau[r1].append(Pion(r1 , c1 , WHITE))
-
-                    # Pion.draw( piece,  r1 , c1)
-                    # self.create_Plateau()
-                    # server._move(self , r1 , c1)
-                    if self.winner():
-                        print(f"Game Over. Winner: {self.winner()}")
+                    # self.plateau[r1].append(Pion(r1 , c1 , WHITE))
+                    # if self.winner():
+                    #     print(f"Game Over. Winner: {self.winner()}")
                 else:
                     print("No piece at the starting position which is ", row , col)
                 return r1 , c1 
@@ -544,34 +541,48 @@ class Plateau :
     #             best_score = score
     #             best_move = move
     #     return best_move
+    def jouer_aleatoirement(self):
+        import random
+        players = ['WHITE', 'BLACK']
+        return random.choice(players)
 
-    def choose_best_move(self, player_color):
+    def monte_carlo_Algorithme(self, player_color):
         valid_moves = self.get_all_valid_moves(player_color)
-        best_move = None
-        best_score = -1
+        print('valid moves in monte carlos algorithme ', valid_moves.items())
+        choix = None
+        max_score = 0
         # temp_plateau = deepcopp
-        for start_pos, moves in valid_moves.items():
-            original_piece = self.get_pion(*start_pos)
-            for end_pos, move_details in moves.items():
-                # Simulate the move
-                
-                self.changerPosition(  original_piece, *end_pos[:2])
-                score = self.monte_carlo_tree_search(player_color)
-                # Undo the move
-                self.changerPosition(self.get_pion(*end_pos[:2]), *start_pos )
+        keys = [(item[0] , item[1]) for item in valid_moves]
+        print('the keys are ', keys)
+        # for start_pos, moves in valid_moves.items():
+        for pion in keys :
+            Gain = 0 
+            print('le pion now is ', pion)
+            pion = self.get_pion(pion[0], pion[1])
+            valid_move = self.get_valid_moves(pion)
+            print('la valid move is ', valid_move)
+            # random 
+            memoriserTableau = deepcopy(self.plateau)
+            for _ in range (3) :
+                takeWinner = self.jouer_aleatoirement()
+                if takeWinner == WHITE :
+                    Gain = Gain+1
+                    self.tableau = deepcopy(memoriserTableau)
+            if Gain>max_score :
+                max_score = Gain
+                choix = pion 
+            print('la valeur de gain is ', Gain)
+        
 
-                if score > best_score:
-                    best_score = score
-                    best_move = (start_pos, end_pos)
-
-        return best_move
+        return choix
+    
 
     def get_all_valid_moves(self, player_color):
         moves = {}
         for row in range(ROWS):
             for col in range(COLS):
                 pion = self.plateau[row][col]
-                if pion != 0 :
+                if pion != 0 and pion.color == player_color:
                     valid_moves = self.get_valid_moves(pion)
                     if valid_moves:
                         moves[(row, col)] = valid_moves
@@ -586,6 +597,24 @@ class Plateau :
     #                 if valid_moves:
     #                     moves[(row, col)] = valid_moves
     #     return moves
+
+
+
+
+
+
+    #   original_piece = self.get_pion(*start_pos)
+    #         for end_pos, move_details in moves.items():
+    #             # Simulate the move
+    #             self.changerPosition(  original_piece, *end_pos[:2])
+    #             print('second argument in choose best move  ', *end_pos[:2])
+    #             score = self.monte_carlo_tree_search(player_color)
+    #             # Undo the move
+    #             # self.changerPosition(self.get_pion(*end_pos[:2]), *start_pos )
+
+    #             if score > best_score:
+    #                 best_score = score
+    #                 best_move = (start_pos, end_pos)
 
     
 

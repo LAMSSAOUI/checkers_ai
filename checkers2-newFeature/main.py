@@ -47,6 +47,7 @@ def main():
     Server = server(screen)
     game_display = GameDisplay(screen, server)
     plateau = Plateau()
+    ai_moved = False
 
 
     running = True
@@ -63,22 +64,10 @@ def main():
                 Server.select(row, col)
 
         turn = Server.get_turn()
-        # print('the turn now from main file is ',turn )
-        # new = deepcopy(plateau)
-        # plateau.print_board() 
-        # print("Board state before move:")
-        # plateau.print_board_state()
-        if turn == 'WHITE' :
-            # print('########## we are in white #############')
+        if turn == 'WHITE' and not ai_moved :
             plateau.ai_move(screen) 
-            # print('the r1 and c1 ', r1  , c1 )
-            # Server._move(r1 , c1)
-            # print("Board state after move:")
-            # plateau.print_board_state()
+            ai_moved = True    
             Server.change_turn
-
-        # plateau.draw(screen)
-        
             
 
 

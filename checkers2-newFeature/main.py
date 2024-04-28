@@ -79,8 +79,9 @@ def main():
 
             moves = Server.get_valid_moves()
             print('my moves now ', moves)
-            # Server._move(row_des , col_des)
+            Server.select(piece.row , piece.col)
             plateau.changerPosition(piece , row_des , col_des)
+            Server._move(row_des , col_des)
             # piece.move(row_des , col_des )
             ai_moved = True    
             Server.change_turn

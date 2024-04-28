@@ -81,7 +81,7 @@ class server :
 
     def _move(self, row, col):
         piece = self.plateau.get_pion(row, col)
-        if  piece == 0 and (row, col) in self.valid_moves:
+        if  self.selected and piece == 0 and (row, col) in self.valid_moves:
             move_info = self.valid_moves[(row, col)]
             # Extract move information
             moved_pawn, r, c, is_skip = move_info[:4] if len(move_info) == 4 else move_info[:5]

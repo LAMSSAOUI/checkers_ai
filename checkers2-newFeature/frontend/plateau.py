@@ -428,25 +428,35 @@ class Plateau :
         # from Backend.server import server 
         # print('########## we enter here in ai move #############')
         if self.black_restant != 0 and self.white_restant != 0 :  
-            initial_state = deepcopy(self.plateau)
+            # initial_state = deepcopy(self.plateau)
             best_move = self.monte_carlo_Algorithme(WHITE)  
             print('######## the best move is ######## ', best_move)
-            self.plateau = deepcopy(initial_state)
+            # self.plateau = deepcopy(initial_state)
             if best_move:
-                from_pos, to_pos = best_move
-                row , col = from_pos
-                r1 , c1 = to_pos
+
+                row, col = best_move.row , best_move.col
+                print('from_pos and from_pos is ', row , col)
+                from_piece = self.get_pion(row , col)
+                # row , col = from_pos
+                # r1 , c1 = to_pos
+                
                 print('row and col of the from piece', row , col)
-                piece = self.get_pion(row , col)
-                print('this is piece', piece)
-                if piece  :
-                    self.changerPosition( piece, r1 , c1)
+                valid_moves_for_this_pion = self.get_valid_moves(best_move)
+                print('valid_moves_for_this_pion' , valid_moves_for_this_pion)
+                keys = list(valid_moves_for_this_pion.keys())
+                print('my keys of destination now are ',keys[0][0],keys[0][1])  
+                row_des = keys[0][0]
+                col_des = keys[0][1]
+                # piece = self.get_pion(row , col)
+                # print('this is piece', piece)
+                # if piece  :
+                self.changerPosition( from_piece, row_des , col_des)
                     # self.plateau[r1].append(Pion(r1 , c1 , WHITE))
                     # if self.winner():
                     #     print(f"Game Over. Winner: {self.winner()}")
-                else:
-                    print("No piece at the starting position which is ", row , col)
-                return r1 , c1 
+                # else:
+                #     print("No piece at the starting position which is ", row , col)
+                return row , col 
             else:
                 print("No valid moves for AI")
         else:
@@ -565,8 +575,10 @@ class Plateau :
             memoriserTableau = deepcopy(self.plateau)
             for _ in range (3) :
                 takeWinner = self.jouer_aleatoirement()
-                if takeWinner == WHITE :
-                    Gain = Gain+1
+                print('take winner now is ', takeWinner)
+                if takeWinner == 'WHITE' :
+                    Gain = Gain + 1
+                    print('la valeur de Gain is now ', Gain)
                     self.tableau = deepcopy(memoriserTableau)
             if Gain>max_score :
                 max_score = Gain

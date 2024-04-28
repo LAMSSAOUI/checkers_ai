@@ -85,6 +85,7 @@ def main():
             # piece.move(row_des , col_des )
             ai_moved = True    
             Server.change_turn
+        ai_moved = False
             
 
 

@@ -65,7 +65,22 @@ def main():
 
         turn = Server.get_turn()
         if turn == 'WHITE' and not ai_moved :
-            plateau.ai_move(screen) 
+            piece , row_des , col_des , valid_moves = plateau.ai_move(screen) 
+            print('from main this is what you should change ', piece , row_des , col_des)
+            # Server.ai_selected = True
+            # piece1 = plateau.get_pion( row_des , col_des)
+            # print('this is piece in main', piece1)
+            # Server.set_valid_moves(row_des , col_des)
+            print('this is valid_moves ',valid_moves)
+            for key, value in valid_moves.items():
+                Server.add_to_valid_moves(key , value)
+                # Use key and value to add to valid_moves using the setter method
+                # add_to_valid_moves(key, value)
+
+            moves = Server.get_valid_moves()
+            print('my moves now ', moves)
+            Server._move(row_des , col_des)
+            plateau.changerPosition(piece , row_des , col_des)
             ai_moved = True    
             Server.change_turn
             

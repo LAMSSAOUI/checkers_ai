@@ -442,6 +442,7 @@ class Plateau :
                 
                 print('row and col of the from piece', row , col)
                 valid_moves_for_this_pion = self.get_valid_moves(best_move)
+                
                 print('valid_moves_for_this_pion' , valid_moves_for_this_pion)
                 keys = list(valid_moves_for_this_pion.keys())
                 print('my keys of destination now are ',keys[0][0],keys[0][1])  
@@ -450,13 +451,15 @@ class Plateau :
                 # piece = self.get_pion(row , col)
                 # print('this is piece', piece)
                 # if piece  :
-                self.changerPosition( from_piece, row_des , col_des)
+                
+                # self.changerPosition( from_piece, row_des , col_des)
+                # from_piece.move(row_des,col_des)
                     # self.plateau[r1].append(Pion(r1 , c1 , WHITE))
                     # if self.winner():
                     #     print(f"Game Over. Winner: {self.winner()}")
                 # else:
                 #     print("No piece at the starting position which is ", row , col)
-                return row , col 
+                return from_piece ,row_des , col_des  , valid_moves_for_this_pion
             else:
                 print("No valid moves for AI")
         else:

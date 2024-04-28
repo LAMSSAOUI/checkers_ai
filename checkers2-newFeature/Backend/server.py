@@ -6,6 +6,7 @@ from frontend.pion import Pion
 class server :
     def __init__(self,win ):
         self.selected = None 
+        # self.ai_selected = None
         self.plateau = Plateau()
         self.turn = None
         self.turnK = GREY
@@ -22,6 +23,17 @@ class server :
     
     def setTurnK(self , turnk) :
         self.turnk = turnk
+
+    def set_valid_moves(self, row_des, col_des):
+        self.row_des = row_des
+        self.col_des = col_des
+        self.valid_moves = {(row_des, col_des)}  # Update valid_moves with row_des and col_des
+
+    def get_valid_moves(self):
+        return self.valid_moves
+    
+    def add_to_valid_moves(self, key, value):
+        self.valid_moves[key] = value
 
 
     
@@ -69,7 +81,7 @@ class server :
 
     def _move(self, row, col):
         piece = self.plateau.get_pion(row, col)
-        if self.selected and piece == 0 and (row, col) in self.valid_moves:
+        if  piece == 0 and (row, col) in self.valid_moves:
             move_info = self.valid_moves[(row, col)]
             # Extract move information
             moved_pawn, r, c, is_skip = move_info[:4] if len(move_info) == 4 else move_info[:5]
